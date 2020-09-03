@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //Para injecte los metodos GET POST, etc de routes
-app.use(require('./routes/usuario'));
+app.use(require('./routes/index'));
 
 const port=process.env.PORT;
 

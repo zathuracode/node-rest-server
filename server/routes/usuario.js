@@ -3,11 +3,15 @@ const app = express();
 const bcrypt = require('bcrypt');
 const _=require('underscore');
 const Usuario =require('../models/usuario');
+const { verificaToken,verificaAdminRol } =require('../middlewares/autenticacion');
 
-app.get('/usuario', function (req, res) {
+//Recibe el middlewares verificaToken
+app.get('/usuario',verificaToken,function (req, res) {
 
     const estado=true;
 
+    //Obtengo la informacion del usuario que se puso en el request en el middleware
+    let usuario=req.usuario;
     let desde=Number(req.query.desde) || 0;
     let limite=Number(req.query.limite) || 5;
 
@@ -34,7 +38,7 @@ app.get('/usuario', function (req, res) {
     });
 });
 
-app.get('/usuario/:id', function (req, res) {
+app.get('/usuario/:id',verificaToken, function (req, res) {
     let id=req.params.id;
     Usuario.findById(id,(err,usuarioDB)=>{
         if(err) {
@@ -54,7 +58,7 @@ app.get('/usuario/:id', function (req, res) {
     });
 })
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario',[verificaToken,verificaAdminRol], function (req, res) {
 
     let body=req.body;
 
@@ -83,7 +87,7 @@ app.post('/usuario', function (req, res) {
     });
 })
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id',[verificaToken,verificaAdminRol], function (req, res) {
 
     let id=req.params.id;
     //let body=req.body;
@@ -132,7 +136,7 @@ app.put('/usuario/:id', function (req, res) {
 // })
 
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id',[verificaToken,verificaAdminRol], function (req, res) {
     let id=req.params.id;
    
     // let arreglo=['estado'];
