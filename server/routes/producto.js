@@ -42,6 +42,34 @@ app.get("/producto", (req, res) => {
     });
 });
 
+// Buscar productos regex
+
+app.get("/producto/buscar/:termino",verificaToken, (req, res) => {
+
+  let termino=req.params.termino;
+
+  let regex=new RegExp(termino,'i');
+
+  console.log(regex);
+  
+  Producto.find({nombre:regex})
+    .sort("descripcion")
+    .populate('categoria')
+    .exec((err, productoDB) => {
+      if (err) {
+        return res.status(400).json({
+          ok: false,
+          error: err,
+        });
+      }
+
+      return res.json({
+        ok: true,
+        producto: productoDB,
+      });
+    });
+});
+
 app.post("/producto", verificaToken, (req, res) => {
   let body = req.body;
 
