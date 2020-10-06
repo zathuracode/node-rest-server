@@ -25,7 +25,8 @@ const port=process.env.PORT;
 mongoose.connect(process.env.URLDB,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex:true
+    useCreateIndex:true,
+    useFindAndModify: false 
   }, (err,res)=>{
 
     if(err) throw err;
