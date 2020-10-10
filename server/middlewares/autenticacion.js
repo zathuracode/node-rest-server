@@ -23,6 +23,26 @@ let verificaToken=(req,res,next)=>{
 
     })
 }
+
+let verificaTokenUrl=(req,res,next)=>{
+
+    let token=req.query.token;
+
+    jwt.verify(token,process.env.SEED,(err,decoded)=>{
+       if(err){
+        return res.status(401).json({
+            ok:false,
+            error:{
+                message:'Token invalido'
+            }
+        });
+       }
+       
+       req.usuario=decoded.usuario;
+       next();
+
+    })
+}
 //=========================
 // verificar admin rol
 //=========================
@@ -45,5 +65,5 @@ let verificaAdminRol=(req,res,next)=>{
 }
 
 module.exports={
-    verificaToken,verificaAdminRol
+    verificaToken,verificaAdminRol,verificaTokenUrl
 }
